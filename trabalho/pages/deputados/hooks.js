@@ -6,7 +6,13 @@ const hooks = () => {
         nome = ''
     }
     return (
-        <div>hooks</div>
+        <>
+            <h1>Nome dos Deputados</h1>
+            <br></br>
+            {deputados.map(item => (
+                <p>{item.nome}</p>
+                ))}
+        </>
     )
 }
 
