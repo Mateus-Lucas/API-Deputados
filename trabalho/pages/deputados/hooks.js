@@ -10,8 +10,8 @@ const hooks = () => {
             <h1>Nome dos Deputados</h1>
             <br></br>
             {deputados.map(item => (
-                <p>{item.nome}</p>
-                ))}
+                <img title={item.nome} key={item.id} src={item.urlFoto} width='150px' />
+            ))}
         </>
     )
 }
