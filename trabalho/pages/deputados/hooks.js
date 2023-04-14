@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import apiDeputados from '../../services/apiDeputados';
+
 
 const hooks = () => {
-    let nome = ''
-    function alterarNome() {
-        nome = ''
-    }
+
+    const [deputados, setDeputados] = useState([])
+  
+    useEffect(()=>{
+  
+        apiDeputados.get('/deputados').then(resultado=>{
+            setDeputados(resultado.data.dados)
+        })
+            
+    }, [])
+  
     return (
         <>
             <h1>Nome dos Deputados</h1>
