@@ -1,11 +1,17 @@
-import Pagina0 from '../componentes/Pagina0';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import Pagina from '@/components/Pagina'
+import React from 'react'
 
-export default function Home() {
+const index = () => {
   return (
     <>
-     <Pagina0/>
-     <h1>Deputados</h1>
+    
+      <Pagina titulo='Teste'>
+
+      </Pagina>
+    
     </>
   )
 }
+
+export default index
+
