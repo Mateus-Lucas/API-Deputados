@@ -11,7 +11,7 @@ const Pagina = (props) => {
         <>
             <Cabecalho />
 
-            <div className='bg-success text-white text-center py-2 mb-3'>
+            <div className='bg-secondary text-white text-center py-2 mb-3'>
 
                 <h1>{props.titulo}</h1>
 

@@ -9,8 +9,8 @@ const style = {
 const Rodape = () => {
   return (
 
-    <div style={style.rodape}className='bg-secondary text-white text-center position-fixed bottom-0 mt-5'>
-      <p>Jikan API (4.0.0)</p>
+    <div style={style.rodape}className='bg-primary text-white text-center position-fixed bottom-0 mt-5'>
+      <p>© 2023 Câmara dos Deputados do Brasil. Todos os direitos reservados.</p>
     </div>
 
   )
