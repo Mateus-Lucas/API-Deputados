@@ -3,8 +3,10 @@ import apiDeputados from '@/services/apiDeputados';
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import Grafico2 from '@/components/Grafico2';
+import Link from 'next/link';
 
-const Index = ({ partidos}) => {
+const Index = ({ partidos }) => {
+
   return (
     <Pagina titulo='Partidos'>
       <Row md={4}>
@@ -15,7 +17,7 @@ const Index = ({ partidos}) => {
               <Card.Body>
                 <Card.Title>{item.sigla}</Card.Title>
                 <Card.Text>{item.nome}</Card.Text>
-                <Button variant="primary">Sobre</Button>
+                <Link href={'/partidos/' + item.id}><Button variant="primary">Sobre</Button></Link>
               </Card.Body>
             </Card>
           </Col>
@@ -30,10 +32,6 @@ export default Index;
 
 export async function getServerSideProps(context) {
 
-  //const id = context.params.id
-
-  //const parti = await apiDeputados.get('/partidos/' + {id})
-  //const partido = parti.data.dados
 
   const part = await apiDeputados.get('/partidos');
   const partidos = part.data.dados;

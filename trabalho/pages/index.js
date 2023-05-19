@@ -50,7 +50,7 @@ const Index = () => {
             <Card.Body>
               <Card.Title>Deputados</Card.Title>
               <Card.Text>Página referente aos deputados</Card.Text>
-              <Button variant="primary">Saiba <TiPlus /></Button>
+              <Link href='/deputados/'><Button variant="primary">Saiba <TiPlus /></Button></Link>
             </Card.Body>
           </Card>
           <Card style={getCardStyle(1)} className="card" onMouseEnter={() => handleMouseEnter(1)} onMouseLeave={handleMouseLeave}>
@@ -71,6 +71,7 @@ const Index = () => {
           </Card>
         </div>
       </Pagina>
+    
     </>
   );
 };

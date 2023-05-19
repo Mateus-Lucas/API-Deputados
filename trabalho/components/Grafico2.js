@@ -2,10 +2,27 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import apiDeputados from '../services/apiDeputados';
 
-const ApexChart = ({ partidos }) => {
+const ApexChart = () => {
   const [chartData, setChartData] = useState(null);
 
+  let siglas = []
+  let membros = []
+
+  console.log(siglas)
+
   useEffect(() => {
+
+    apiDeputados.get('/partidos').then(resultado=>{
+      const partidos = resultado.data.dados
+      
+
+      partidos.map(item=>{
+        siglas.push(item.sigla)
+      })
+      console.log(siglas);
+
+    })
+
     const fetchData = async () => {
       const data = {
         series: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 16 ],
@@ -14,7 +31,7 @@ const ApexChart = ({ partidos }) => {
             width: '50%', 
             type: 'pie',
           },
-          labels: ['PL', 'Team B', 'Team C', 'Team D', 'Team E', 'Teamcuma'],
+          labels: siglas,
           responsive: [
             {
               breakpoint: 480,
@@ -54,11 +71,3 @@ const ApexChart = ({ partidos }) => {
 
 export default ApexChart;
 
-export async function getServerSideProps(context) {
-  const part = await apiDeputados.get('/partidos');
-  const partidos = part.data.dados;
-
-  return {
-    props: { partidos },
-  };
-}

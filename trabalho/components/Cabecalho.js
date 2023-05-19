@@ -13,7 +13,7 @@ const Cabecalho = () => {
         width="40"
         height="40"
         className="d-inline-block align-top"
-      />{' '}
+      />
       Câmara dos Deputados do Brasil
     </Navbar.Brand>
     <Nav className="me-auto">
