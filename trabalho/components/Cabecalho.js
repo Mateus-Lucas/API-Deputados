@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
-import { Button, Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import { Container, Form, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 
 const Cabecalho = () => {
   return (
     <Navbar bg="primary" variant="dark">
   <Container>
-    <Navbar.Brand href="#">
+    <Navbar.Brand>
       <img
         alt=""
         src="https://www.desterrodomelo.mg.leg.br/imagens/brasao-republica.png/image_preview"

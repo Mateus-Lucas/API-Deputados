@@ -1,57 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import apiDeputados from '../services/apiDeputados';
+import { useRouter } from 'next/router';
 
 const ApexChart = () => {
   const [chartData, setChartData] = useState(null);
-
-  let siglas = []
-  let membros = []
-
-  console.log(siglas)
+  const router = useRouter();
+  const { id } = router.query; 
 
   useEffect(() => {
-
-    apiDeputados.get('/partidos').then(resultado=>{
-      const partidos = resultado.data.dados
-      
-
-      partidos.map(item=>{
-        siglas.push(item.sigla)
-      })
-      console.log(siglas);
-
-    })
-
     const fetchData = async () => {
-      const data = {
-        series: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 16 ],
-        options: {
-          chart: {
-            width: '50%', 
-            type: 'pie',
-          },
-          labels: siglas,
-          responsive: [
-            {
-              breakpoint: 480,
-              options: {
-                chart: {
-                  width: '50%', 
-                },
-                legend: {
-                  position: 'bottom',
-                },
+      try {
+        const resultado = await apiDeputados.get('/partidos');
+        const partidos = resultado.data.dados;
+        const siglas = partidos.map(item => item.sigla);
+
+        // const num_id = await apiDeputados.get('/partidos/' + id);
+        // const num_part = num_id.data.dados;
+        // const quant = num_part.map(item => item.status.totalMembros);
+
+        // const membros = quant.map(() => '6');
+
+        console.log(partidos)
+        // console.log(num_part)
+
+        const data = {
+          series: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 16], 
+          options: {
+            chart: {
+              width: '50%',
+              type: 'pie',
+            },
+            title: {
+              text: 'Quantidades de membros',
+              style: {
+                fontSize: '28px',
+                fontWeight: 'bold',
               },
             },
-          ],
-        },
-      };
-      setChartData(data);
+            labels: siglas,
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: '50%',
+                  },
+                  legend: {
+                    position: 'bottom',
+                  },
+                },
+              },
+            ],
+          },
+        };
+
+        setChartData(data);
+      } catch (error) {
+        console.error('Erro ao obter dados dos partidos:', error);
+      }
     };
 
     fetchData();
-  }, []);
+  }, [id]); 
 
   const DynamicReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -70,4 +81,3 @@ const ApexChart = () => {
 };
 
 export default ApexChart;
-
