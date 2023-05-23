@@ -7,30 +7,28 @@ const ApexChart = () => {
   const color_blue = ['#008FFB'];
   const color_black = ['#000000'];
   const [chartData, setChartData] = useState(null);
+  const [quantidades, setQuantidades] = useState([]);
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const resultado = await apiDeputados.get('/partidos');
         const partidos = resultado.data.dados;
         const siglas = partidos.map(item => item.sigla);
 
-        // const num_id = await apiDeputados.get('/partidos/' + id);
-        // const num_part = num_id.data.dados;
-        // const quant = num_part.map(item => item.status.totalMembros);
+        const promises = partidos.map(async (item) => {
+          const partido = await apiDeputados.get('/partidos/' + item.id);
+          const membros = partido.data.dados.status.totalMembros;
+          return membros;
+        });
 
-        // const membros = quant.map(() => '6');
+        const quantidade = await Promise.all(promises);
+        setQuantidades(quantidade);
 
-        console.log(partidos)
-        // console.log(num_part)
-        
         const data = {
-          series: [{
-            data: [21, 22, 10, 28, 16, 21, 13, 30, 12, 15, 15, 15, 15, 15, 15]
-          }],
+          categories: siglas,
           options: {
             chart: {
               height: 350,
@@ -85,7 +83,7 @@ const ApexChart = () => {
       {chartData && (
         <div>
           <h1 className='text-center'>Quantidades de membros por partidos</h1>
-          <DynamicApexChart options={chartData.options} series={chartData.series} type="bar" height={350} />
+          <DynamicApexChart options={chartData.options} series={[{ data: quantidades }]} type="bar" height={350} />
         </div>
       )}
     </div>

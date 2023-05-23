@@ -15,6 +15,7 @@ const ApexChart = () => {
         const partidos = resultado.data.dados;
         const siglas = partidos.map(item => item.sigla);
 
+        
         // const num_id = await apiDeputados.get('/partidos/' + id);
         // const num_part = num_id.data.dados;
         // const quant = num_part.map(item => item.status.totalMembros);
