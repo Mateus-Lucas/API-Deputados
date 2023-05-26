@@ -10,7 +10,6 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 const Index = () => {
   const [partidos, setPartidos] = useState([]);
   const router = useRouter();
-  const { id } = router.query;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +66,7 @@ const Index = () => {
         interesses de seus eleitores. Os partidos políticos também desempenham um papel crucial na formação de governos,
         seja por meio de coalizões ou por assumirem sozinhos o poder.
       </p>
-      <p>
+      <p>''
         Além disso, os partidos políticos desempenham um papel na formulação de políticas públicas. Eles desenvolvem
         propostas, debatem ideias e participam do processo legislativo, contribuindo para a criação de leis e
         regulamentos. Por meio de seus membros eleitos, os partidos podem influenciar a agenda política e direcionar
