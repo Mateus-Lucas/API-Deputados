@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Col, Row, Table } from 'react-bootstrap'
 import apiDeputados from '../../services/apiDeputados'
 import Pagina from '../../components/Pagina'
 import Link from 'next/link'
 
-
 const Detalhes = ({ deputado, despesas, profissoes }) => {
+
+  const [somaDespesas, setSomaDespesas] = useState(0); // Estado para armazenar a soma das despesas
+
+  // Função para calcular a soma das despesas
+  const calcularSomaDespesas = () => {
+    const soma = despesas.reduce((acumulador, item) => acumulador + item.valorDocumento, 0);
+    setSomaDespesas(soma);
+  };
+
+  // Função para redefinir o valor da soma das despesas para zero
+  const resetSomaDespesas = () => {
+    setSomaDespesas(0);
+  };
+
   return (
     <Pagina titulo={deputado.ultimoStatus.nome}>
-
       <Row>
         <Col md={3}>
           <Card className='mb-4'>
@@ -34,27 +46,29 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
               </tr>
             </thead>
             <tbody>
-              {despesas.map((item, lista) => (
-                <tr key={lista}>
+              {despesas.map((item) => (
+                <tr key={item.id}>
                   <td>{item.dataDocumento}</td>
                   <td>{item.tipoDespesa}</td>
                   <td>{item.valorDocumento}</td>
                 </tr>
               ))}
             </tbody>
-
           </Table>
+          <Button variant='primary' onClick={calcularSomaDespesas}>Somar Despesas</Button> {/* Botão para calcular a soma das despesas */}
+          <Button variant='danger' onClick={resetSomaDespesas}>Reset</Button> {/* Botão para redefinir a soma das despesas */}
+          <p>Total das despesas: {somaDespesas}</p> {/* Exibe a soma das despesas */}
+
         </Col>
         <Col md={2}>
           <h1>Profissões</h1>
           <ul>
-            {profissoes.map(item => (
-              <li>{item.titulo}</li>
+            {profissoes.map((item, index) => (
+              <li key={index}>{item.titulo}</li>
             ))}
           </ul>
         </Col>
       </Row>
-
     </Pagina>
   )
 }
@@ -62,7 +76,6 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
 export default Detalhes
 
 export async function getServerSideProps(context) {
-
   const id = context.params.id
 
   const dep = await apiDeputados.get('/deputados/' + id)
@@ -77,5 +90,4 @@ export async function getServerSideProps(context) {
   return {
     props: { despesas, deputado, profissoes },
   }
-
 }

@@ -82,7 +82,7 @@ const ApexChart = () => {
     <div id="chart">
       {chartData && (
         <div>
-          <h1 className='text-center'>Quantidades de membros por partidos</h1>
+          <h1 className='text-center bg-secondary text-white'>Quantidades de membros por partido</h1>
           <DynamicApexChart options={chartData.options} series={[{ data: quantidades }]} type="bar" height={350} />
         </div>
       )}
