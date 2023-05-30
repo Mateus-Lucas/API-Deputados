@@ -57,7 +57,7 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
           </Table>
           <Button variant='primary' onClick={calcularSomaDespesas}>Somar Despesas</Button> {/* Botão para calcular a soma das despesas */}
           <Button variant='danger' onClick={resetSomaDespesas}>Reset</Button> {/* Botão para redefinir a soma das despesas */}
-          <p>Total das despesas: {somaDespesas}</p> {/* Exibe a soma das despesas */}
+          <p>Total das despesas: R${somaDespesas}</p> {/* Exibe a soma das despesas */}
 
         </Col>
         <Col md={2}>

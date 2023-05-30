@@ -16,22 +16,26 @@ const Index = () => {
       try {
         const resultado = await apiDeputados.get('/partidos');
         const dadosPartidos = resultado.data.dados;
-
+  
         const promises = dadosPartidos.map(async (partido) => {
           const partidoData = await apiDeputados.get(`/partidos/${partido.id}`);
           const logo = partidoData.data.dados.urlLogo;
           return { ...partido, logo };
         });
-
+  
         const partidosComLogo = await Promise.all(promises);
         setPartidos(partidosComLogo);
+  
+        // Aguarde um intervalo de tempo antes de fazer a próxima requisição
+        setTimeout(fetchData, 10000); // Aguarda 1 segundo (1000 milissegundos) antes de fazer a próxima requisição
       } catch (error) {
         console.error('Erro ao obter dados dos partidos:', error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   const handleImageError = (event) => {
     event.target.src = 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg'; // substitua pelo caminho da imagem "not found"

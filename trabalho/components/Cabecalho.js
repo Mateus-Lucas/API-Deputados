@@ -8,45 +8,47 @@ const Cabecalho = () => {
   const router = useRouter();
   const selectedOptionRef = useRef(null);
 
-  const [selectedId, setSelectedId] = useState('');
-  const [siglas, setSiglas] = useState([]);
-  const [siglasPartidos, setSiglasPartidos] = useState([]);
+  const [partidos, setPartidos] = useState([]);
   const [deputados, setDeputados] = useState([]);
 
   const handleSearch = () => {
     const selectedOption = selectedOptionRef.current.value;
-
-    const partidoSelected = siglas.find(sigla => selectedOption === `${sigla} (Partido)`);
-
-    if (partidoSelected) {
-      // Navegar para a página de partido com base no ID do partido
-      router.push('/partidos/' );
-    } else {
+  
+    const partidoSelected = partidos.find(partido => selectedOption === `${partido.sigla} (Partido)`);
+    const deputadoSelected = deputados.find(deputado => selectedOption === `${deputado.nome} (${deputado.siglaPartido})`);
+    
+    if (deputadoSelected) {
+      // Encontrar o ID correspondente ao deputado selecionado
+      const idSelected = deputadoSelected.id;
+  
       // Navegar para a página de deputados com base no ID do deputado
-      router.push('/deputados/' );
-    }
-  };
+      router.push('/deputados/' + idSelected);
 
+    } else if (partidoSelected) {
+      // Encontrar o ID correspondente ao partido selecionado
+      const idSelected = partidoSelected.id;
+      
+      // Navegar para a página de partido com base no ID do partido
+      router.push('/partidos/' + idSelected);
+    } 
+  };
+  
   useEffect(() => {
-    const fetchPartidos = async () => {
+    const fetchPartidosDeputados = async () => {
       try {
         const resultadoPartidos = await apiDeputados.get('/partidos');
         const partidos = resultadoPartidos.data.dados;
-        const siglas = partidos.map(item => item.sigla);
-        setSiglas(siglas);
+        setPartidos(partidos);
 
         const resultadoDeputados = await apiDeputados.get('/deputados');
         const deputados = resultadoDeputados.data.dados;
-        const nomesDeputados = deputados.map(item => item.nome);
-        const siglasPartidos = deputados.map(item => item.siglaPartido);
-        setDeputados(nomesDeputados);
-        setSiglasPartidos(siglasPartidos);
+        setDeputados(deputados);
       } catch (error) {
         console.error('Erro ao obter dados:', error);
       }
     };
 
-    fetchPartidos();
+    fetchPartidosDeputados();
   }, []);
 
   return (
@@ -86,11 +88,11 @@ const Cabecalho = () => {
             ref={selectedOptionRef}
           />
           <datalist id="siglasPartidos">
-            {siglas.map((sigla, lista1) => (
-              <option key={lista1} value={sigla + ' (Partido)'} />
+            {partidos.map((partido, index) => (
+              <option key={index} value={partido.sigla + ' (Partido)'} />
             ))}
-            {deputados.map((nome, lista2) => (
-              <option key={lista2} value={`${siglasPartidos[lista2]} - ${nome} `} />
+            {deputados.map((deputado, index) => (
+              <option key={index} value={`${deputado.nome} (${deputado.siglaPartido})`} />
             ))}
           </datalist>
         </Form>
