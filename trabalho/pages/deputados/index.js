@@ -7,9 +7,9 @@ const Deputados = () => {
     return (
         <>
             <Pagina titulo='Deputados'>
-                <Container className='justify-content-end'>
+                
                 <Carrossel />
-                </Container>
+                
             </Pagina>
         </>
     )

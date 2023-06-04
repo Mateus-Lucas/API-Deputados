@@ -227,3 +227,12 @@
     transform: rotate(0deg);
   }
 }
+.custom-card {
+  flex: 0 0 25%; /* Define a largura dos cartões para ocuparem 25% do contêiner */
+}
+
+.card-image {
+  width: 100%; /* Define a largura da imagem como 100% do contêiner */
+  height: 200px; /* Define a altura da imagem */
+  object-fit: cover; /* Redimensiona a imagem para preencher o contêiner, mantendo a proporção */
+}
