@@ -9,15 +9,22 @@ import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 const Index = () => {
   const [partidos, setPartidos] = useState([]);
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPartidos = async () => {
       try {
-        const resultado = await apiDeputados.get('/partidos');
-        const dadosPartidos = resultado.data.dados;
+        const resultado = await apiDeputados.get('/partidos', {
+          params: {
+            pagina,
+            itens: 4, // quantidade de partidos por página
+          },
+        });
+        const { dados: partidosData, links } = resultado.data;
   
-        const promises = dadosPartidos.map(async (partido) => {
+        const promises = partidosData.map(async (partido) => {
           const partidoData = await apiDeputados.get(`/partidos/${partido.id}`);
           const logo = partidoData.data.dados.urlLogo;
           return { ...partido, logo };
@@ -26,19 +33,44 @@ const Index = () => {
         const partidosComLogo = await Promise.all(promises);
         setPartidos(partidosComLogo);
   
-        // Aguarde um intervalo de tempo antes de fazer a próxima requisição
-        setTimeout(fetchData, 10000); // Aguarda 1 segundo (1000 milissegundos) antes de fazer a próxima requisição
+        // Calcular o número total de páginas
+        const lastPageUrl = links.find((link) => link.rel === 'last')?.href;
+        const totalPaginas = extractPageNumberFromURL(lastPageUrl);
+  
+        setTotalPaginas(totalPaginas);
       } catch (error) {
         console.error('Erro ao obter dados dos partidos:', error);
       }
     };
   
-    fetchData();
-  }, []);
-  
+    fetchPartidos();
+  }, [pagina]);
+
 
   const handleImageError = (event) => {
-    event.target.src = 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg'; // substitua pelo caminho da imagem "not found"
+    event.target.src = 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg';
+  };
+
+  const handleNextPage = () => {
+    if (pagina < totalPaginas) {
+      setPagina(pagina + 1);
+    }
+  };  
+
+  const handlePreviousPage = () => {
+    if (pagina > 1) {
+      setPagina(pagina - 1);
+    }
+  };
+
+  const extractPageNumberFromURL = (url) => {
+    if (url) {
+      const urlObj = new URL(url);
+      const searchParams = new URLSearchParams(urlObj.search);
+      const pageParam = searchParams.get('pagina');
+      return parseInt(pageParam, 10);
+    }
+    return 0;
   };
 
   return (
@@ -77,8 +109,6 @@ const Index = () => {
         as políticas do governo de acordo com sua visão e programa.
       </p>
       <br></br>
-      <Grafico1/>
-      <br></br>
       <h1 className='text-center bg-secondary text-white'>Buscar por partidos</h1>
       <Row md={4}>
         {partidos.map((partido) => (
@@ -90,15 +120,27 @@ const Index = () => {
             src={partido.logo} 
             onError={handleImageError}/>
               <Card.Body>
-                <Card.Title>{partido.sigla}</Card.Title>
+                <Card.Title className='text-center'>{partido.sigla}</Card.Title>
                 <Link href={`/partidos/${partido.id}`}>
-                  <Button variant="primary">Sobre <BsBoxArrowUpRight/></Button>
+                  <Button className='w-100' variant="primary">Sobre <BsBoxArrowUpRight/></Button>
                 </Link>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
+
+      <div className="pagination-wrapper d-flex justify-content-center mt-4">
+      <div className="pagination">
+        <Button className="mr-3" onClick={handlePreviousPage} disabled={pagina === 1}>
+          Anterior
+        </Button>
+        <span className="mx-3">Página {pagina} de {totalPaginas}</span>
+        <Button className="ml-3" onClick={handleNextPage} disabled={pagina === totalPaginas}>
+          Próxima
+        </Button>
+      </div>
+    </div>
     </Pagina>
   );
 };

@@ -8,47 +8,43 @@ const Cabecalho = () => {
   const router = useRouter();
   const selectedOptionRef = useRef(null);
 
-  const [partidos, setPartidos] = useState([]);
-  const [deputados, setDeputados] = useState([]);
+  const [partidosDeputados, setPartidosDeputados] = useState([]);
 
   const handleSearch = () => {
     const selectedOption = selectedOptionRef.current.value;
-  
-    const partidoSelected = partidos.find(partido => selectedOption === `${partido.sigla} (Partido)`);
-    const deputadoSelected = deputados.find(deputado => selectedOption === `${deputado.nome} (${deputado.siglaPartido})`);
-    
-    if (deputadoSelected) {
-      // Encontrar o ID correspondente ao deputado selecionado
-      const idSelected = deputadoSelected.id;
-  
-      // Navegar para a página de deputados com base no ID do deputado
-      router.push('/deputados/' + idSelected);
 
-    } else if (partidoSelected) {
-      // Encontrar o ID correspondente ao partido selecionado
-      const idSelected = partidoSelected.id;
-      
-      // Navegar para a página de partido com base no ID do partido
-      router.push('/partidos/' + idSelected);
-    } 
+    const partidoDeputadoSelected = partidosDeputados.find(
+      ({ nome, siglaPartido }) => selectedOption === `${nome} (${siglaPartido})`
+    );
+
+    if (partidoDeputadoSelected) {
+      const { tipo, id } = partidoDeputadoSelected;
+      const route = tipo === 'partido' ? '/partidos/' : '/deputados/';
+      router.push(route + id);
+    }
   };
-  
-  useEffect(() => {
-    const fetchPartidosDeputados = async () => {
-      try {
-        const resultadoPartidos = await apiDeputados.get('/partidos');
-        const partidos = resultadoPartidos.data.dados;
-        setPartidos(partidos);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resultado = await apiDeputados.get('/partidos');
+        const partidos = resultado.data.dados;
+        
         const resultadoDeputados = await apiDeputados.get('/deputados');
         const deputados = resultadoDeputados.data.dados;
-        setDeputados(deputados);
+
+        const partidosDeputados = [
+          ...partidos.map((partido) => ({ ...partido, tipo: 'partido' })),
+          ...deputados.map((deputado) => ({ ...deputado, tipo: 'deputado' })),
+        ];
+        
+        setPartidosDeputados(partidosDeputados);
       } catch (error) {
         console.error('Erro ao obter dados:', error);
       }
     };
 
-    fetchPartidosDeputados();
+    fetchData();
   }, []);
 
   return (
@@ -67,13 +63,10 @@ const Cabecalho = () => {
         <Nav className="me-auto">
           <Nav.Link href="/">Início</Nav.Link>
           <NavDropdown title="Deputados" id="navbarScrollingDropdown">
-            <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
+            <NavDropdown.Item href='/deputados'>Lista de Deputados</NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link href="partidos">Partidos</Nav.Link>
-          <Nav.Link href="#pricing">Votações</Nav.Link>
+          <Nav.Link href="/partidos">Partidos</Nav.Link>
+          <Nav.Link href="#">Votações</Nav.Link>
         </Nav>
         <Form className="d-flex ms-auto">
           <span className="input-group-text" onClick={handleSearch} style={{ cursor: 'pointer' }}>
@@ -88,11 +81,8 @@ const Cabecalho = () => {
             ref={selectedOptionRef}
           />
           <datalist id="siglasPartidos">
-            {partidos.map((partido, index) => (
-              <option key={index} value={partido.sigla + ' (Partido)'} />
-            ))}
-            {deputados.map((deputado, index) => (
-              <option key={index} value={`${deputado.nome} (${deputado.siglaPartido})`} />
+            {partidosDeputados.map((item, index) => (
+              <option key={index} value={`${item.nome} (${item.siglaPartido})`} />
             ))}
           </datalist>
         </Form>

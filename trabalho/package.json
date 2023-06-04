@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "proxy": "node proxy.js"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.8",
@@ -14,12 +15,15 @@
     "@fullcalendar/react": "^6.1.8",
     "apexcharts": "^3.40.0",
     "axios": "^1.4.0",
+    "axios-retry": "^3.5.0",
     "bootstrap": "^5.2.3",
+    "http-proxy-middleware": "^2.0.6",
     "next": "13.4.2",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "18.2.0",
-    "react-icons": "^4.8.0"
+    "react-icons": "^4.8.0",
+    "xml2js": "^0.6.0"
   }
 }
