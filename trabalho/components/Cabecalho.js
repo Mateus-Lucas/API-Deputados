@@ -9,6 +9,7 @@ const Cabecalho = () => {
   const selectedOptionRef = useRef(null);
 
   const [partidosDeputados, setPartidosDeputados] = useState([]);
+  const [partidos, setPartidos] = useState([]);
 
   const handleSearch = () => {
     const selectedOption = selectedOptionRef.current.value;
@@ -29,7 +30,8 @@ const Cabecalho = () => {
       try {
         const resultado = await apiDeputados.get('/partidos');
         const partidos = resultado.data.dados;
-        
+        setPartidos(partidos)
+
         const resultadoDeputados = await apiDeputados.get('/deputados');
         const deputados = resultadoDeputados.data.dados;
 
@@ -37,7 +39,7 @@ const Cabecalho = () => {
           ...partidos.map((partido) => ({ ...partido, tipo: 'partido' })),
           ...deputados.map((deputado) => ({ ...deputado, tipo: 'deputado' })),
         ];
-        
+
         setPartidosDeputados(partidosDeputados);
       } catch (error) {
         console.error('Erro ao obter dados:', error);
@@ -46,6 +48,7 @@ const Cabecalho = () => {
 
     fetchData();
   }, []);
+
 
   return (
     <Navbar bg="primary" variant="dark">
@@ -58,15 +61,22 @@ const Cabecalho = () => {
             height="40"
             className="d-inline-block align-top"
           />
+          {' '}
           Câmara dos Deputados do Brasil
         </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link href="/">Início</Nav.Link>
-          <NavDropdown title="Deputados" id="navbarScrollingDropdown">
-            <NavDropdown.Item href='/deputados'>Lista de Deputados</NavDropdown.Item>
+          <NavDropdown title="Deputados">
+            <NavDropdown.Item eventKey="todos">TODOS</NavDropdown.Item>
+            {partidos.map((item, index) => (
+              <NavDropdown.Item key={index} eventKey={index}>
+                {item.sigla}
+              </NavDropdown.Item>
+            ))}
           </NavDropdown>
+
           <Nav.Link href="/partidos">Partidos</Nav.Link>
-          <Nav.Link href="#">Votações</Nav.Link>
+          <Nav.Link href="/votacoes">Votações</Nav.Link>
         </Nav>
         <Form className="d-flex ms-auto">
           <span className="input-group-text" onClick={handleSearch} style={{ cursor: 'pointer' }}>
@@ -82,7 +92,7 @@ const Cabecalho = () => {
           />
           <datalist id="siglasPartidos">
             {partidosDeputados.map((item, index) => (
-              <option key={index} value={`${item.nome} (${item.siglaPartido})`} />
+                <option key={index} value={`${item.nome} (${item.tipo === 'partido' ? item.sigla : item.siglaPartido})`} />
             ))}
           </datalist>
         </Form>
