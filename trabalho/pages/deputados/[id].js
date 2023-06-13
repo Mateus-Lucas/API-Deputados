@@ -55,7 +55,12 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
             {calendarioVisivel ? 'Ocultar Calendário' : 'Exibir Calendário'}
           </Button>
           {calendarioVisivel && (
-            <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" events={eventosDespesas} />
+            <FullCalendar 
+            plugins={[dayGridPlugin]} 
+            initialView="dayGridMonth" 
+            events={eventosDespesas}
+            locale="pt-br"
+            />
           )}
           <Button variant='primary' onClick={calcularSomaDespesas}>Somar Despesas</Button>
           <Button variant='danger' onClick={resetSomaDespesas}>Reset</Button>
