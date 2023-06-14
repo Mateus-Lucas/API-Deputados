@@ -76,7 +76,7 @@ const Cabecalho = () => {
           </NavDropdown>
 
           <Nav.Link href="/partidos">Partidos</Nav.Link>
-          <Nav.Link href="/votacoes">Votações</Nav.Link>
+          <Nav.Link href="/proposicoes">proposicoes</Nav.Link>
         </Nav>
         <Form className="d-flex ms-auto">
           <span className="input-group-text" onClick={handleSearch} style={{ cursor: 'pointer' }}>

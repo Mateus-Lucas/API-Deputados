@@ -1,19 +1,16 @@
 import Pagina from '@/components/Pagina'
 import React from 'react'
-import {Container} from 'react-bootstrap'
 import Carrossel from '../../components/Carrossel'
-
+import ListaDeputados from '@/components/ListaDespesas'
 const Deputados = () => {
     return (
         <>
             <Pagina titulo='Deputados'>
-                
+
+                <ListaDeputados/>
                 <Carrossel />
-                
-            </Pagina>
+            </Pagina> 
         </>
     )
 }
-
 export default Deputados
-
