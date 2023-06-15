@@ -85,7 +85,7 @@ export async function getServerSideProps(context) {
   const dep = await apiDeputados.get('/deputados/' + id);
   const deputado = dep.data.dados;
 
-  const desp = await apiDeputados.get('/deputados/' + id + '/despesas');
+  const desp = await apiDeputados.get('/deputados/' + id + '/despesas?itens=100&mes=4&ano=2023');
   const despesas = desp.data.dados;
 
   const prof = await apiDeputados.get('/deputados/' + id + '/profissoes');

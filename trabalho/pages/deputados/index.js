@@ -6,8 +6,6 @@ const Deputados = () => {
     return (
         <>
             <Pagina titulo='Deputados'>
-
-                <ListaDeputados/>
                 <Carrossel />
             </Pagina> 
         </>

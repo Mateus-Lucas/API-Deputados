@@ -10,12 +10,19 @@ const Cabecalho = () => {
 
   const [partidosDeputados, setPartidosDeputados] = useState([]);
   const [partidos, setPartidos] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = () => {
-    const selectedOption = selectedOptionRef.current.value;
-
     const partidoDeputadoSelected = partidosDeputados.find(
-      ({ nome, siglaPartido }) => selectedOption === `${nome} (${siglaPartido})`
+      ({ id, nome, siglaPartido }) => {
+        const partidoDeputadoSelected = partidosDeputados.find(
+          ({ tipo, id, nome, siglaPartido }) => {
+            const itemValue = tipo === 'partido' ? nome : siglaPartido;
+            return itemValue.toLowerCase().includes(searchValue.toLowerCase());
+          }
+        );
+        
+      }
     );
 
     if (partidoDeputadoSelected) {
@@ -30,7 +37,7 @@ const Cabecalho = () => {
       try {
         const resultado = await apiDeputados.get('/partidos');
         const partidos = resultado.data.dados;
-        setPartidos(partidos)
+        setPartidos(partidos);
 
         const resultadoDeputados = await apiDeputados.get('/deputados');
         const deputados = resultadoDeputados.data.dados;
@@ -48,7 +55,6 @@ const Cabecalho = () => {
 
     fetchData();
   }, []);
-
 
   return (
     <Navbar bg="primary" variant="dark">
@@ -76,7 +82,7 @@ const Cabecalho = () => {
           </NavDropdown>
 
           <Nav.Link href="/partidos">Partidos</Nav.Link>
-          <Nav.Link href="/proposicoes">proposicoes</Nav.Link>
+          <Nav.Link href="/proposicoes">Proposições</Nav.Link>
         </Nav>
         <Form className="d-flex ms-auto">
           <span className="input-group-text" onClick={handleSearch} style={{ cursor: 'pointer' }}>
@@ -86,13 +92,17 @@ const Cabecalho = () => {
             type="search"
             placeholder="Digite uma palavra"
             className="me-2"
+
+
             aria-label="Pesquisar"
             list="siglasPartidos"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             ref={selectedOptionRef}
           />
           <datalist id="siglasPartidos">
             {partidosDeputados.map((item, index) => (
-                <option key={index} value={`${item.nome} (${item.tipo === 'partido' ? item.sigla : item.siglaPartido})`} />
+              <option key={index} value={`${item.nome} (${item.tipo === 'partido' ? item.sigla : item.siglaPartido})`} />
             ))}
           </datalist>
         </Form>
