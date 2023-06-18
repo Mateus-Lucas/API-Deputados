@@ -14,7 +14,7 @@ const ApexChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resultado = await apiDeputados.get('/partidos');
+        const resultado = await apiDeputados.get('/partidos?itens=5');
         const partidos = resultado.data.dados;
         const siglas = partidos.map(item => item.sigla);
 
