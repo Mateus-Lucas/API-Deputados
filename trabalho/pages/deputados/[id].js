@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, Row, Table } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import apiDeputados from '../../services/apiDeputados';
 import Pagina from '../../components/Pagina';
 import Link from 'next/link';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 
-const Detalhes = ({ deputado, despesas, profissoes }) => {
+const Detalhes = ({ deputado, profissoes }) => {
   const [somaDespesas, setSomaDespesas] = useState(0);
   const [eventosDespesas, setEventosDespesas] = useState([]);
   const [calendarioVisivel, setCalendarioVisivel] = useState(false);
+  const [mes, setMes] = useState(''); // Valor inicial vazio
+  const [ano, setAno] = useState(''); // Valor inicial vazio
 
-  const calcularSomaDespesas = () => {
-    const soma = despesas.reduce((acumulador, item) => acumulador + item.valorDocumento, 0);
-    setSomaDespesas(soma);
+  const calcularSomaDespesas = async () => {
+    try {
+      const response = await apiDeputados.get(`/deputados/${deputado.id}/despesas?itens=50&mes=${mes}&ano=${ano}`);
+      const despesas = response.data.dados;
+
+      const soma = despesas.reduce((acumulador, item) => acumulador + item.valorDocumento, 0);
+      setSomaDespesas(soma);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const resetSomaDespesas = () => {
@@ -21,16 +30,31 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
   };
 
   useEffect(() => {
-    const eventos = despesas.map((item) => ({
-      title: item.tipoDespesa,
-      date: item.dataDocumento
-    }));
+    const fetchDespesas = async () => {
+      try {
+        const response = await apiDeputados.get(`/deputados/${deputado.id}/despesas?itens=50&mes=${mes}&ano=${ano}`);
+        const despesas = response.data.dados;
 
-    setEventosDespesas(eventos);
-  }, [despesas]);
+        const eventos = despesas.map((item) => ({
+          title: item.tipoDespesa,
+          date: item.dataDocumento
+        }));
+
+        setEventosDespesas(eventos);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDespesas();
+  }, [deputado.id, mes, ano]);
 
   const toggleCalendario = () => {
     setCalendarioVisivel(!calendarioVisivel);
+  };
+
+  const formatarValor = (valor) => {
+    return valor.toLocaleString('pt-BR');
   };
 
   return (
@@ -46,30 +70,58 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
             </Card.Body>
           </Card>
           <Link href='/deputados/'>
-            <Button variant='danger'>Voltar</Button>
+            <Button variant='danger' size='sm'>Voltar</Button>
           </Link>
         </Col>
-        <Col md={7}>
+        <Col>
+          <h1>Profissões</h1>
+          {profissoes.map((item) => (
+            <ul key={item.id}>
+              <li key={item.id}>{item.titulo}</li>
+            </ul>
+          ))}
+        </Col>
+      </Row>
+      <br></br>
+      <br></br>
+      <br></br>
+      <Row>
+        <Col>
           <h1>Despesas</h1>
-          <Button variant='secondary' onClick={toggleCalendario}>
+          <Button variant='secondary' size='sm' onClick={toggleCalendario}>
             {calendarioVisivel ? 'Ocultar Calendário' : 'Exibir Calendário'}
           </Button>
           {calendarioVisivel && (
-            <FullCalendar 
-            plugins={[dayGridPlugin]} 
-            initialView="dayGridMonth" 
-            events={eventosDespesas}
-            locale="pt-br"
-            />
+            <>
+              <div className="mb-3 mt-3">
+                <h3>Informe o mês para calcular as despesas:</h3>
+
+                <div className="input-group mb-3 mt-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">Mês:</span>
+                  </div>
+                  <input type="number" className="form-control" value={mes} onChange={(e) => setMes(e.target.value)} />
+                </div>
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">Ano:</span>
+                  </div>
+                  <input type="number" className="form-control" value={ano} onChange={(e) => setAno(e.target.value)} />
+                </div>
+              </div>
+
+              <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView="dayGridMonth"
+                events={eventosDespesas}
+                locale="pt-br"
+              />
+
+              <Button variant='primary' onClick={calcularSomaDespesas}>Somar Despesas</Button>
+              <Button variant='danger' onClick={resetSomaDespesas}>Reset</Button>
+              <p>Total das despesas: R$ {formatarValor(somaDespesas)}</p>
+            </>
           )}
-          <Button variant='primary' onClick={calcularSomaDespesas}>Somar Despesas</Button>
-          <Button variant='danger' onClick={resetSomaDespesas}>Reset</Button>
-          <p>Total das despesas: R${somaDespesas}</p>
-        </Col>
-        <Col>
-          {profissoes.map((item) =>(
-            <ul><li>{item.titulo}</li></ul>
-          ))}
         </Col>
       </Row>
     </Pagina>
@@ -78,20 +130,16 @@ const Detalhes = ({ deputado, despesas, profissoes }) => {
 
 export default Detalhes;
 
-
 export async function getServerSideProps(context) {
   const id = context.params.id;
 
   const dep = await apiDeputados.get('/deputados/' + id);
   const deputado = dep.data.dados;
 
-  const desp = await apiDeputados.get('/deputados/' + id + '/despesas?itens=100&mes=4&ano=2023');
-  const despesas = desp.data.dados;
-
   const prof = await apiDeputados.get('/deputados/' + id + '/profissoes');
   const profissoes = prof.data.dados;
 
   return {
-    props: { despesas, deputado, profissoes }
+    props: { deputado, profissoes }
   };
 }
