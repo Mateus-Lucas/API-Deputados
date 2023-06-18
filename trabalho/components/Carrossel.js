@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import apiDeputados from '@/services/apiDeputados';
-import Link from 'next/link';
 import { Card, Carousel } from 'react-bootstrap';
+import { useRouter } from 'next/router';
 
 function DarkVariantExample() {
   const [deputados, setDeputados] = useState([]);
   const [partidos, setPartidos] = useState([]);
+  const router = useRouter();
+  const selectedPartyRef = useRef(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,15 +35,40 @@ function DarkVariantExample() {
     return grouped;
   };
 
+  const handlePartyChange = () => {
+    const selectedParty = selectedPartyRef.current.value;
+    if (selectedParty) {
+      const partySectionId = `partido${selectedParty}`;
+      const partySectionElement = document.getElementById(partySectionId);
+      if (partySectionElement) {
+        partySectionElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleDeputadoClick = (deputadoId) => {
+    router.push(`/deputados/${deputadoId}`);
+  };
+
   return (
     <>
+      <div className="d-flex justify-content-center m-3">
+        <select className="form-select" onChange={handlePartyChange} ref={selectedPartyRef}>
+          <option value="">Selecione um partido</option>
+          {partidos.map((partido) => (
+            <option key={partido.sigla} value={partido.sigla}>
+              {partido.sigla}
+            </option>
+          ))}
+        </select>
+      </div>
       {deputados.length > 0 &&
         partidos.map((partido) => {
           const deputadosPartido = deputados.filter((deputado) => deputado.siglaPartido === partido.sigla);
           const deputadosGrouped = groupDeputados(deputadosPartido);
 
           return (
-            <div key={partido.sigla} style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div key={partido.sigla} id={`partido${partido.sigla}`} style={{ maxWidth: '1000px', margin: '0 auto' }}>
               <h1 className='text-center bg-secondary text-white'>Partido {partido.sigla}</h1>
               <Carousel variant="dark" indicators={true}>
                 {deputadosGrouped.map((grupo, index) => (
@@ -55,7 +82,7 @@ function DarkVariantExample() {
                               src={deputado.urlFoto}
                               style={{ height: '300px', objectFit: 'cover' }}
                             />
-                            <Card.Body className="text-left"> {/* Alterado para "text-left" */}
+                            <Card.Body className="text-left">
                               <Card.Title>{deputado.nome}</Card.Title>
                               <p>
                                 Estado: <strong>{deputado.siglaUf}</strong>
@@ -63,9 +90,9 @@ function DarkVariantExample() {
                               <p>
                                 Partido: <strong>{deputado.siglaPartido}</strong>
                               </p>
-                              <Link className="btn bg-primary text-white w-100" href={`/deputados/${deputado.id}`}>
+                              <button className="btn bg-primary text-white w-100" onClick={() => handleDeputadoClick(deputado.id)}>
                                 Sobre
-                              </Link>
+                              </button>
                             </Card.Body>
                           </Card>
                         </div>
