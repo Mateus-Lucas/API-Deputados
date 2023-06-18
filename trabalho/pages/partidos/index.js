@@ -109,6 +109,8 @@ const Index = () => {
         as políticas do governo de acordo com sua visão e programa.
       </p>
       <br></br>
+      <Grafico1 />
+      <br></br>
       <h1 className='text-center bg-secondary text-white'>Buscar por partidos</h1>
       <Row md={4}>
         {partidos.map((partido) => (
