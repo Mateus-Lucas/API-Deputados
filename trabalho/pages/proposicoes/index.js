@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Pagina from '../../components/Pagina';
 import apiDeputados from '../../services/apiDeputados';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Image, Row } from 'react-bootstrap';
 import Link from 'next/link';
 
 const Index = ({ deputados }) => {
@@ -56,8 +56,38 @@ const Index = ({ deputados }) => {
 
   return (
     <Pagina titulo="Proposições">
-      <Row>
-        <Col className='bg-primary p-2 input-group-text'>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Image style={{ width: '650px', borderRadius: '10px' }} src="https://tudorondonia.com/uploads/14-12-22-68poqk0ldvoo90l.jpg" />
+        <div style={{ marginLeft: '20px' }}>
+          <br />
+          <p>
+            As preposições de deputados são iniciativas legislativas propostas por parlamentares com o objetivo de
+            abordar e solucionar questões específicas relacionadas a determinados temas ou setores da sociedade.
+            Essas propostas se configuram como instrumentos de atuação parlamentar, permitindo que os deputados exerçam
+            sua função de representação e legislação de forma mais direta e pontual.
+          </p>
+
+          <p>
+            Uma preposição de deputado geralmente surge como resposta a demandas e necessidades identificadas pelos
+            próprios parlamentares em suas bases eleitorais ou em áreas de especial interesse. Essas propostas podem
+            abranger diversas áreas, como educação, saúde, segurança, meio ambiente, economia, entre outras, com o
+            objetivo de apresentar soluções ou melhorias específicas em cada uma delas.
+          </p>
+        </div>
+      </div>
+      <p>Uma vez que uma preposição é apresentada por um deputado, ela passa a tramitar nas instâncias legislativas
+        competentes, como as comissões parlamentares. Durante esse processo, a preposição é discutida, analisada e
+        recebe possíveis emendas ou modificações, garantindo a participação e a colaboração de outros parlamentares e
+        especialistas na elaboração final do texto.
+      </p>
+      <p>Após a tramitação e a aprovação em todas as etapas legislativas, uma preposição de deputado pode se tornar uma
+        lei ou ter um destino específico, como a proposição de políticas públicas, a criação de programas ou a realização
+        de estudos e pesquisas. Essas preposições são importantes ferramentas de representação política, permitindo que
+        os deputados atuem de forma concreta em prol dos interesses e necessidades da sociedade.
+      </p>
+      <br></br>
+      <Row className='bg-primary p-2 input-group-text'>
+        <Col>
           <input className='input-group-text'
             type="text"
             value={searchTerm}
@@ -71,6 +101,11 @@ const Index = ({ deputados }) => {
             ))}
           </datalist>
         </Col>
+        <Col>
+        <h2 className='text-white'>Busque uma nova proposição</h2>
+        </Col>
+        <Col></Col>
+
       </Row>
       <br></br>
       <Row md={5}>

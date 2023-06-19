@@ -73,9 +73,9 @@ const Index = () => {
           <Card style={getCardStyle(2)} className="card" onMouseEnter={() => handleMouseEnter(2)} onMouseLeave={handleMouseLeave} >
             <Card.Img variant='top' src='https://www.camara.leg.br/midias/image/2022/12/img20221220192318053-768x512.jpg'></Card.Img>
             <Card.Body>
-              <Card.Title>Votações</Card.Title>
-              <Card.Text>Página referente às votações</Card.Text>
-              <Button variant="primary">Saiba <TiPlus /></Button>
+              <Card.Title>Proposições</Card.Title>
+              <Card.Text>Página referente às proposições</Card.Text>
+              <Link href='/proposicoes/'><Button variant="primary">Saiba <TiPlus /></Button></Link>
             </Card.Body>
           </Card>
         </div>

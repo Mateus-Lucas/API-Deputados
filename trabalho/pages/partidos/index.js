@@ -76,7 +76,6 @@ const Index = () => {
   return (
     <Pagina titulo='Partidos'>
       <br></br>
-      <h1 className='text-center bg-secondary text-white'>Definição de partidos</h1>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Image src="https://www.camara.leg.br/midias/image/2023/01/img20220331154441356.jpg" />
         <div style={{ marginLeft: '20px' }}>

@@ -3,11 +3,9 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import apiDeputados from '../../services/apiDeputados';
 import Pagina from '../../components/Pagina';
 import Link from 'next/link';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 
 const Detalhes = ({ proposicao, proposicaoAutor }) => {
- 
+
   console.log(proposicaoAutor)
 
 
@@ -15,7 +13,7 @@ const Detalhes = ({ proposicao, proposicaoAutor }) => {
     <Pagina>
       <Row>
         <Col md={3}>
-          
+
           <Link href='/proposicoes/'>
             <Button variant='danger'>Voltar</Button>
           </Link>
@@ -24,9 +22,15 @@ const Detalhes = ({ proposicao, proposicaoAutor }) => {
           <h1>PROPOSIÇÃO</h1>
           <p>{proposicao.ementa}</p>
 
-          {proposicaoAutor.map((item) => {
-            <h2>{item.nome}</h2>
-          })}
+          {proposicaoAutor.map((item) => (
+            <Col key = {item.id}>
+              <p>{item.codTipo}</p>
+              <p>{item.nome}</p>
+              <p>{item.ordemAssinatura}</p>
+              <p>{item.proponente}</p>
+              <p>{item.tipo}</p>
+            </Col>
+        ))}
 
         </Col>
       </Row>
@@ -39,7 +43,7 @@ export default Detalhes;
 export async function getServerSideProps(context) {
   const id = context.params.id;
 
-  
+
   try {
 
     const proposicoes = await apiDeputados.get(`/proposicoes/${id}`);
@@ -50,7 +54,7 @@ export async function getServerSideProps(context) {
 
 
     return {
-      props: { proposicao, proposicaoAutor}
+      props: { proposicao, proposicaoAutor }
     };
   } catch (error) {
     // Trate o erro aqui, por exemplo, redirecionando para uma página de erro
