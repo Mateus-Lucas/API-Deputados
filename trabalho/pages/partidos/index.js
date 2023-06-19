@@ -122,8 +122,8 @@ const Index = () => {
             onError={handleImageError}/>
               <Card.Body>
                 <Card.Title className='text-center'>{partido.sigla}</Card.Title>
-                <Link href={`/partidos/${partido.id}`}>
-                  <Button className='w-100' variant="primary">Sobre <BsBoxArrowUpRight/></Button>
+                <Link href={`>
+                  <Button c/partidos/${partido.id}`}lassName='w-100' variant="primary">Sobre <BsBoxArrowUpRight/></Button>
                 </Link>
               </Card.Body>
             </Card>
