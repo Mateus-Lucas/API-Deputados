@@ -110,7 +110,7 @@ const Index = () => {
       <br></br>
       <Grafico1 />
       <br></br>
-      <h1 className='text-center bg-secondary text-white'>Buscar por partidos</h1>
+      <h2 className='text-center bg-primary text-white p-2' style={{ borderRadius: '5px' }}>Buscar por partidos</h2>
       <Row md={4}>
         {partidos.map((partido) => (
           <Col key={partido.id}>
@@ -122,8 +122,8 @@ const Index = () => {
             onError={handleImageError}/>
               <Card.Body>
                 <Card.Title className='text-center'>{partido.sigla}</Card.Title>
-                <Link href={`>
-                  <Button c/partidos/${partido.id}`}lassName='w-100' variant="primary">Sobre <BsBoxArrowUpRight/></Button>
+                <Link href={`/partidos/${partido.id}`}>
+                  <Button className='w-100' variant="primary">Sobre <BsBoxArrowUpRight/></Button>
                 </Link>
               </Card.Body>
             </Card>

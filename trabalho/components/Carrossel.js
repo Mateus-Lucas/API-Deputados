@@ -69,7 +69,7 @@ function DarkVariantExample() {
 
           return (
             <div key={partido.sigla} id={`partido${partido.sigla}`} style={{ maxWidth: '1000px', margin: '0 auto' }}>
-              <h1 className='text-center bg-secondary text-white'>Partido {partido.sigla}</h1>
+              <h2 className='text-center bg-primary text-white p-2' style={{ borderRadius: '5px' }}>Partido {partido.sigla}</h2>
               <Carousel variant="dark" indicators={true}>
                 {deputadosGrouped.map((grupo, index) => (
                   <Carousel.Item key={index}>
