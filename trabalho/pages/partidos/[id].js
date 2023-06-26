@@ -4,9 +4,6 @@ import 'react-bootstrap-carousel/dist/react-bootstrap-carousel.css';
 import apiDeputados from '@/services/apiDeputados';
 import Pagina from '@/components/Pagina';
 import { Carousel } from 'react-bootstrap';
-import Link from 'next/link';
-import Deputados from '../deputados';
-
 
 const Detalhes = ({ partido, lideres }) => {
   const [scrollTop, setScrollTop] = useState(0);
@@ -21,6 +18,8 @@ const Detalhes = ({ partido, lideres }) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  console.log(partido)
 
   const handleScrollToTop = () => {
     window.scrollTo({
@@ -56,8 +55,8 @@ const Detalhes = ({ partido, lideres }) => {
               )}
 
               <Card.Text>Nome: {partido.nome}</Card.Text>
-              <Card.Text>Número Eleitoral: {partido.numeroEleitoral}</Card.Text>
-              <Card.Text>Website: {partido.urlWebSite}</Card.Text>
+              <Card.Text>Número Eleitoral: {partido.numeroEleitoral? partido.numeroEleitoral: 'Não informado'}</Card.Text>
+              <Card.Text>Website: {partido.urlWebSite? partido.urlWebSite : 'Não informado'}</Card.Text>
               <Card.Text>Situação: {partido.status.situacao}</Card.Text>
               <Card.Text>Total de Membros: {partido.status.totalMembros}</Card.Text>
             </div>
