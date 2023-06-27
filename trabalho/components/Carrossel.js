@@ -12,7 +12,7 @@ function DarkVariantExample() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const deputadosResult = await apiDeputados.get('/deputados');
+        const deputadosResult = await apiDeputados.get('/deputados?itens=600');
         const deputadosData = deputadosResult.data.dados;
         setDeputados(deputadosData);
 
