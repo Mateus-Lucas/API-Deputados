@@ -52,7 +52,7 @@ const Cabecalho = () => {
         setPartidos(partidos);
 
         // Buscando os deputados da API
-        const resultadoDeputados = await apiDeputados.get('/deputados');
+        const resultadoDeputados = await apiDeputados.get('/deputados?itens=600');
         const deputados = resultadoDeputados.data.dados;
         setDeputados(deputados);
       } catch (error) {

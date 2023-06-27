@@ -139,7 +139,7 @@ export default Index;
 
 export async function getServerSideProps(context) {
   try {
-    const response = await apiDeputados.get('/deputados');
+    const response = await apiDeputados.get('/deputados?itens=600');
     const deputados = response.data.dados;
 
     return {
